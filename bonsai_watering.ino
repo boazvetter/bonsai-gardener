@@ -40,24 +40,40 @@ void setup(void)
     digitalWrite(10, HIGH); 
 }
 
-void loop(void)
+Adafruit_GFX_Button *buttons[] = {&on_btn, &off_btn, NULL}; // Array of buttons. Separate lists for separate buttons?
+
+// Update the button state and redraw
+bool update_button(Adafruit_GFX_Button *b, bool down) 
+{
+    b->press(down && b->contains(pixel_x, pixel_y));
+    if (b->justReleased())
+        b->drawButton(false);
+    if (b->justPressed())
+        b->drawButton(true);
+    return down;
+}
+
+// Process all buttons
+bool update_button_list(Adafruit_GFX_Button **pb) 
 {
     bool down = Touch_getXY();
-    on_btn.press(down && on_btn.contains(pixel_x, pixel_y));
-    off_btn.press(down && off_btn.contains(pixel_x, pixel_y));
-    if (on_btn.justReleased())
-        on_btn.drawButton();
-    if (off_btn.justReleased())
-        off_btn.drawButton();
+    for (int i = 0 ; pb[i] != NULL; i++) {
+        update_button(pb[i], down);
+    }
+    return down;
+}
+
+void loop(void)
+{
+    update_button_list(buttons);  //use helper function
     if (on_btn.justPressed()) {
-        tft.fillRect(40, 80, 160, 60, GREEN);
         digitalWrite(10, HIGH);
+        delay(100);
     }
     if (off_btn.justPressed()) {
-        tft.fillRect(40, 80, 160, 60, RED);
         digitalWrite(10, LOW);
-    }    
-
+        delay(100);
+    }
 }
 
 void showmsg(int x, int y, int sz, const GFXfont *f, const char *msg)
@@ -69,6 +85,7 @@ void showmsg(int x, int y, int sz, const GFXfont *f, const char *msg)
     tft.setTextColor(GREEN);
     tft.setTextSize(sz);
     tft.print(msg);
+    tft.setFont(NULL);
 }
 
 void initializeTFT(){
@@ -84,11 +101,10 @@ void initializeTFT(){
     tft.drawRect(200,150,20,150,WHITE);  // Draw Fuel Rect
     
     //button stuff
-    on_btn.initButton(&tft,  60, 200, 100, 40, WHITE, CYAN, BLACK, "ON", 2);
-    off_btn.initButton(&tft, 180, 200, 100, 40, WHITE, CYAN, BLACK, "OFF", 2);
-    on_btn.drawButton(true);
-    off_btn.drawButton(true);
-    tft.fillRect(40, 80, 160, 60, RED);    
+    on_btn.initButton(&tft,  40, 250, 40, 30, WHITE, WHITE, BLACK, "ON", 2);
+    off_btn.initButton(&tft, 40, 290, 40, 30, WHITE, WHITE, BLACK, "OFF", 2);
+    on_btn.drawButton(false);
+    off_btn.drawButton(false);   
 }
 
 void setHumidity(int humidity){
