@@ -36,6 +36,7 @@ void setup(void)
 {
     Serial.begin(9600);    
     initializeTFT();
+    drawTree();
     pinMode(10, OUTPUT); // Peristaltic pump
     digitalWrite(10, HIGH); 
 }
@@ -96,15 +97,32 @@ void initializeTFT(){
     tft.fillScreen(BLACK);
     showmsg(70, 24, 3, NULL, "Bonsai");
     showmsg(8, 48, 2, NULL, "watering system 0.1");
-    showmsg(70, 220, 2, NULL, "Humidity: ");
+    showmsg(80, 230, 2, NULL, "Humidity: ");
     showmsg(90, 300, 1, &FreeSevenSegNumFont, "67");
-    tft.drawRect(200,150,20,150,WHITE);  // Draw Fuel Rect
+    //tft.drawRect(200,150,20,150,WHITE);  // Draw Fuel Rect
     
     //button stuff
-    on_btn.initButton(&tft,  40, 250, 40, 30, WHITE, WHITE, BLACK, "ON", 2);
-    off_btn.initButton(&tft, 40, 290, 40, 30, WHITE, WHITE, BLACK, "OFF", 2);
+    on_btn.initButton(&tft,  40, 250, 40, 30, GREEN, GREEN, BLACK, "ON", 2);
+    off_btn.initButton(&tft, 40, 290, 40, 30, GREEN, GREEN, BLACK, "OFF", 2);
     on_btn.drawButton(false);
     off_btn.drawButton(false);   
+}
+
+void drawTree(){
+  showmsg(20, 80, 1, NULL, "                 ***");  
+  showmsg(20, 90, 1, NULL, "            @&&&(((((&.");
+  showmsg(20, 100, 1, NULL, "        @@%%%&&&#######");
+  showmsg(20, 110, 1, NULL, "       @&%%%%%%&%(&(((((#((&");
+  showmsg(20, 120, 1, NULL, "        @@@@@&&((&#####%%&");
+  showmsg(20, 130, 1, NULL, "            &&&(##&* #%");
+  showmsg(20, 140, 1, NULL, "              &@.&,%%##(");
+  showmsg(20, 150, 1, NULL, "               ,((#(%&.");
+  showmsg(20, 160, 1, NULL, "               &%%&");
+  showmsg(20, 170, 1, NULL, "             &%@#");
+  showmsg(20, 180, 1, NULL, "             .%%@%");
+  showmsg(20, 190, 1, NULL, "                &%%&.");
+  showmsg(20, 200, 1, NULL, "                 .%%%/%(");
+  showmsg(20, 210, 1, NULL, "          *@@@@@@@@@@@@@@@*");      
 }
 
 void setHumidity(int humidity){
