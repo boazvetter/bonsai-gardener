@@ -95,8 +95,8 @@ void initializeTFT(){
     tft.begin(ID);
     tft.setRotation(0);
     tft.fillScreen(BLACK);
-    showmsg(70, 24, 3, NULL, "Bonsai");
-    showmsg(8, 48, 2, NULL, "watering system 0.1");
+    showmsg(20, 24, 3, NULL, "Bonsai v0.2");
+    //showmsg(8, 48, 2, NULL, "watering system 0.1");
     showmsg(80, 230, 2, NULL, "Humidity: ");
     showmsg(90, 300, 1, &FreeSevenSegNumFont, "67");
     //tft.drawRect(200,150,20,150,WHITE);  // Draw Fuel Rect
@@ -109,20 +109,22 @@ void initializeTFT(){
 }
 
 void drawTree(){
-  showmsg(20, 80, 1, NULL, "                 ***");  
-  showmsg(20, 90, 1, NULL, "            @&&&(((((&.");
-  showmsg(20, 100, 1, NULL, "        @@%%%&&&#######");
-  showmsg(20, 110, 1, NULL, "       @&%%%%%%&%(&(((((#((&");
-  showmsg(20, 120, 1, NULL, "        @@@@@&&((&#####%%&");
-  showmsg(20, 130, 1, NULL, "            &&&(##&* #%");
-  showmsg(20, 140, 1, NULL, "              &@.&,%%##(");
-  showmsg(20, 150, 1, NULL, "               ,((#(%&.");
-  showmsg(20, 160, 1, NULL, "               &%%&");
-  showmsg(20, 170, 1, NULL, "             &%@#");
-  showmsg(20, 180, 1, NULL, "             .%%@%");
-  showmsg(20, 190, 1, NULL, "                &%%&.");
-  showmsg(20, 200, 1, NULL, "                 .%%%/%(");
-  showmsg(20, 210, 1, NULL, "          *@@@@@@@@@@@@@@@*");      
+  showmsg(0, 60, 1, NULL, "                #(");  
+  showmsg(0, 70, 1, NULL, "            /&%&&&%&%(");
+  showmsg(0, 80, 1, NULL, "         (%%&&%@%@%#%/(,(.");
+  showmsg(0, 90, 1, NULL, "       *#(((%%##/&/#&/##%%%(,");
+  showmsg(0, 100, 1, NULL, "     ##%#&%@%&&&%%%%#%@&,,.,");
+  showmsg(0, 110, 1, NULL, "         #%&*&%(&%%##%##%(##%#");
+  showmsg(0, 120, 1, NULL, "            *&&&&#&%&&%&%#(#/*(");
+  showmsg(0, 130, 1, NULL, "    /*#(####(%%##&&&      %#%%#/#*#%*..");
+  showmsg(0, 140, 1, NULL, " /%#%%##%%%%&/,/%&&%#       ./,(# %%%%(%");
+  showmsg(0, 150, 1, NULL, " .*/%##%%  ./%(   #.%*         #(/ #. //");
+  showmsg(0, 160, 1, NULL, "                   #%%\            ");
+  showmsg(0, 170, 1, NULL, "                    #%((");
+  showmsg(0, 180, 1, NULL, "                     %##.");
+  showmsg(0, 190, 1, NULL, "                    *((%,");   
+  showmsg(0, 200, 1, NULL, "                *(/(#(%(/*,"); 
+  showmsg(0, 210, 1, NULL, "****************************************");      
 }
 
 void setHumidity(int humidity){
