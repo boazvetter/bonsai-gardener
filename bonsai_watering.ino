@@ -30,7 +30,10 @@ int pixel_x, pixel_y;     //Touch_getXY() updates global vars
 #define YELLOW   0xFFE0 
 #define WHITE    0xFFFF
 
-int currentHumidity = 0;
+unsigned long previousTime = millis();
+int previousHumidity = 0;
+const int minHumidity = 630;   
+const int maxHumidity = 268;
 
 void setup(void)
 {
@@ -75,6 +78,11 @@ void loop(void)
         digitalWrite(10, LOW);
         delay(100);
     }
+
+    
+  // Read sensor value and update
+  int soilMoistureValue = analogRead(A5); // Moisture sensor connected to A5
+  setHumidity(soilMoistureValue); 
 }
 
 void showmsg(int x, int y, int sz, const GFXfont *f, const char *msg)
@@ -95,11 +103,10 @@ void initializeTFT(){
     tft.begin(ID);
     tft.setRotation(0);
     tft.fillScreen(BLACK);
-    showmsg(20, 24, 3, NULL, "Bonsai v0.2");
+    showmsg(14, 24, 3, NULL, "Bonsai Buddy");
     //showmsg(8, 48, 2, NULL, "watering system 0.1");
     showmsg(80, 230, 2, NULL, "Humidity: ");
-    showmsg(90, 300, 1, &FreeSevenSegNumFont, "67");
-    //tft.drawRect(200,150,20,150,WHITE);  // Draw Fuel Rect
+    showmsg(90, 300, 1, &FreeSevenSegNumFont, "69");
     
     //button stuff
     on_btn.initButton(&tft,  40, 250, 40, 30, GREEN, GREEN, BLACK, "ON", 2);
@@ -119,7 +126,7 @@ void drawTree(){
   showmsg(0, 130, 1, NULL, "    /*#(####(%%##&&&      %#%%#/#*#%*..");
   showmsg(0, 140, 1, NULL, " /%#%%##%%%%&/,/%&&%#       ./,(# %%%%(%");
   showmsg(0, 150, 1, NULL, " .*/%##%%  ./%(   #.%*         #(/ #. //");
-  showmsg(0, 160, 1, NULL, "                   #%%\            ");
+  showmsg(0, 160, 1, NULL, "                   #%%*            ");
   showmsg(0, 170, 1, NULL, "                    #%((");
   showmsg(0, 180, 1, NULL, "                     %##.");
   showmsg(0, 190, 1, NULL, "                    *((%,");   
@@ -128,13 +135,23 @@ void drawTree(){
 }
 
 void setHumidity(int humidity){
-  if(humidity < currentHumidity){
-    tft.fillRect(200,150,20,150,BLACK);  // Draw Fuel Rect
-    tft.drawRect(200,150,20,150,WHITE);  // Draw Fuel Rect    
-  }
-  int mapped_humid = -(humidity/0.67)+1;
-  tft.fillRect(201, 299, 18,  mapped_humid, GREEN); // 285 is max value for y
-  currentHumidity = humidity;
+
+  //map humidity from 0 to 100
+  humidity = constrain(humidity, maxHumidity, minHumidity);
+  int percentage = map(humidity, minHumidity, maxHumidity, 0, 100);
+  unsigned long currentTime = millis();
+  
+  if (percentage > (previousHumidity+1) || percentage < (previousHumidity-1)){ //&& (currentTime > (previousTime+100))
+    tft.fillRect(90, 250, 100, 60, BLACK);
+    //tft.fillScreen(BLACK);
+    char buf[4]; // Allocate byte buffer for int->const char typecast
+    itoa(percentage, buf, 10);
+    showmsg(90, 300, 1, &FreeSevenSegNumFont, buf);
+    previousTime = millis();
+    previousHumidity = percentage;
+  } 
+  
+  
 }
 
 bool Touch_getXY(void)
